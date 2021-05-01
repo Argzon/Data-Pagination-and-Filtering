@@ -19,12 +19,12 @@ function showPage(list, page) {
          let studentItem = `
          <li class="student-item cf">
             <div class="student-details">
-            <img class="avatar" src="${data[i].picture.large}" alt="Profile Picture">
-            <h3>${data[i].name.first} ${data[i].name.last}</h3>
-            <span class="email">${data[i].email}</span>
+            <img class="avatar" src="${list[i].picture.large}" alt="Profile Picture">
+            <h3>${list[i].name.first} ${list[i].name.last}</h3>
+            <span class="email">${list[i].email}</span>
             </div>
             <div class="joined-details">
-            <span class="date">Joined ${data[i].registered.date}</span>
+            <span class="date">Joined ${list[i].registered.date}</span>
             </div>
          </li>
          `;
@@ -65,7 +65,62 @@ function addPagination(list) {
    });
  }
 
+/**
+ * Adding Search Bar
+ * Handling click and keyup events
+ */
+function addSearchBar() {
+   const header = document.querySelector('.header');
+
+   const searchElement = `
+      <label for="search" class="student-search">
+      <span>Search by name</span>
+      <input id="search" placeholder="Search by name...">
+      <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+      </label> 
+   `;
+   
+   header.insertAdjacentHTML('beforeend', searchElement);
+
+   const search = document.querySelector('.student-search input');
+   const submit = document.querySelector('.student-search button');
+
+   submit.addEventListener('click', (e) => {
+      e.preventDefault();
+      searchFunc(data);
+   });
+   
+   search.addEventListener('keyup', () => {
+      searchFunc(data);
+   });
+}
+
+/**
+ * Search function
+ * Filter .student-list based on search input
+ * @param {list} returns the data of students 
+ */
+function searchFunc(list) {
+   const studentList = document.querySelector('.student-list');
+   const input = document.querySelector('.student-search input').value.toLowerCase();
+   const showStudents = [];
+   for (let i = 0; i < list.length; i++) {
+      const name = Object.values(list[i].name).join(' ').toLowerCase();
+      if ( input !== 0 && name.includes(input)) {
+         showStudents.push(list[i]);
+         studentList.textContent = '';
+         showPage(showStudents, 1);
+         addPagination(showStudents);
+       }
+       if (showStudents.length === 0) {
+          studentList.textContent = 'No results found';
+          addPagination(showStudents);
+       }
+   }
+}
+
 
 // Call functions
 showPage(data, 1);
 addPagination(data);
+addSearchBar();
