@@ -97,7 +97,7 @@ function addSearchBar() {
 
 /**
  * Search function
- * Filter .student-list based on search input
+ * Filter .student-list and pagination based on search input
  * @param {list} returns the data of students 
  */
 function searchFunc(list) {
